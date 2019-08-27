@@ -74,7 +74,11 @@ COPY php/cli.ini /etc/php/7.3/fpm/php.ini
 # Configure FPM Pool
 COPY php/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
-RUN mkdir -p /var/run/php/
+RUN mkdir -p /var/run/php \
+ && chown -R www-data:www-data /var/run/php
+
+RUN mkdir -p /app \
+ && chown -R www-data:www-data /app
 
 #####################################
 # INSTALL COMPOSER
@@ -104,14 +108,15 @@ RUN echo "deb http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" \
 RUN curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
 
 # install nginx
-RUN apt-get -qq install nginx > /dev/null
-
-# output logs to docker
-RUN ln -sf /dev/stdout /var/log/nginx/access.log
-RUN ln -sf /dev/stderr /var/log/nginx/error.log
+RUN apt-get update \
+ && apt-get -qq install nginx > /dev/null
 
 # copy configuration
-COPY nginx/nginx.conf /etc/nginx/sites-available/default
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/server.conf /etc/nginx/conf.d/default.conf
+
+RUN mkdir -p /var/run/nginx \
+ && chown -R www-data:www-data /var/run/nginx
 
 #####################################
 # INSTALL SUPERVISOR
@@ -138,6 +143,7 @@ RUN apt-get clean \
 #####################################
 
 COPY run.sh /run.sh
+RUN chmod +x /run.sh
 
 EXPOSE 80
 
