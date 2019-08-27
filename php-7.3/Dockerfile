@@ -16,10 +16,6 @@ RUN apt-get -qq update
 # install dependencies
 RUN apt-get -qq install unzip curl tzdata > /dev/null
 
-# set timezone
-RUN echo "Europe/Brussels" | tee /etc/timezone \
- && dpkg-reconfigure --frontend noninteractive tzdata
-
 #####################################
 # INSTALL PHP
 #
@@ -65,13 +61,8 @@ RUN apt-get -qq install \
     php7.3-soap \
     > /dev/null
 
-# Configure PHP CLI
 COPY php/fpm.ini /etc/php/7.3/cli/php.ini
-
-# Configure PHP FPM
 COPY php/cli.ini /etc/php/7.3/fpm/php.ini
-
-# Configure FPM Pool
 COPY php/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
 RUN mkdir -p /var/run/php \
@@ -107,9 +98,11 @@ RUN echo "deb http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" \
 # import an official nginx signing key so apt could verify the packages authenticity
 RUN curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
 
+# update package index
+RUN apt-get -qq update
+
 # install nginx
-RUN apt-get update \
- && apt-get -qq install nginx > /dev/null
+RUN apt-get -qq install nginx > /dev/null
 
 # copy configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
