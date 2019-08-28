@@ -25,6 +25,16 @@ application_root="${APPLICATION_ROOT:-/app}";
 sed -i "s|%APPLICATION_ROOT%|$application_root|g" /etc/nginx/conf.d/default.conf
 
 #####################################
+# SET PHP FPM USER
+#####################################
+
+# define application root
+php_fpm_user="${PHP_FPM_USER:-www-data}";
+
+# configure nginx
+sed -i "s|%PHP_FPM_USER%|$php_fpm_user|g" /etc/php/7.3/fpm/pool.d/www.conf
+
+#####################################
 # RUN ADDITIONAL ENTRYPOINTS
 #####################################
 
