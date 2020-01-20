@@ -3,7 +3,7 @@
 Docker image for modern PHP applications, served using:
 - Ubuntu
 - Supervisor
-- PHP-fpm 7.3
+- PHP-fpm
 - Nginx
 
 ## Configuration
