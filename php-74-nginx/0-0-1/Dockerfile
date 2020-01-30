@@ -13,8 +13,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # update package index
 RUN apt-get -qq update
 
-# install dependencies
-RUN apt-get -qq install unzip curl tzdata > /dev/null
+# install general dependencies
+RUN apt-get -qq install \
+    zip \
+    unzip \
+    curl \
+    tzdata \
+    > /dev/null
 
 #####################################
 # INSTALL PHP
@@ -31,37 +36,35 @@ RUN apt-get -qq update
 
 # install php packages
 RUN apt-get -qq install \
+    php7.4-bcmath \
+    php7.4-bz2 \
+    php7.4-cli \
+    php7.4-common \
+    php7.4-curl \
+    php7.4-dev \
     php7.4-fpm \
-    php7.4-mysql \
     php7.4-gd \
     php7.4-imagick \
-    php7.4-dev \
-    php7.4-curl \
-    php7.4-opcache \
-    php7.4-cli \
-    php7.4-sqlite \
-    php7.4-intl \
-    php7.4-tidy \
     php7.4-imap \
+    php7.4-intl \
     php7.4-json \
-    php7.4-pspell \
-    php7.4-common \
-    php7.4-sybase \
-    php7.4-sqlite3 \
-    php7.4-bz2 \
-    php7.4-common \
-    php7.4-memcached \
-    php7.4-redis \
-    php7.4-xml \
-    php7.4-shmop \
     php7.4-mbstring \
-    php7.4-zip \
-    php7.4-bcmath \
+    php7.4-memcached \
+    php7.4-mysql \
+    php7.4-opcache \
+    php7.4-pgsql \
+    php7.4-readline \
+    php7.4-redis \
+    php7.4-shmop \
     php7.4-soap \
+    php7.4-sqlite \
+    php7.4-sqlite3 \
+    php7.4-xml \
+    php7.4-zip \
     > /dev/null
 
-COPY php/fpm.ini /etc/php/7.4/cli/php.ini
-COPY php/cli.ini /etc/php/7.4/fpm/php.ini
+COPY php/cli.ini /etc/php/7.4/cli/php.ini
+COPY php/fpm.ini /etc/php/7.4/fpm/php.ini
 COPY php/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 RUN mkdir -p /var/run/php \

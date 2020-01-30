@@ -13,8 +13,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # update package index
 RUN apt-get -qq update
 
-# install dependencies
-RUN apt-get -qq install unzip curl tzdata > /dev/null
+# install general dependencies
+RUN apt-get -qq install \
+    zip \
+    unzip \
+    curl \
+    tzdata \
+    > /dev/null
 
 #####################################
 # INSTALL PHP
@@ -26,43 +31,39 @@ RUN apt-get -qq install unzip curl tzdata > /dev/null
 # add repository for php packages
 RUN apt-add-repository ppa:ondrej/php -y
 
-# update package index
-RUN apt-get -qq update
-
-# install php packages
-RUN apt-get -qq install \
+# update package index & install php packages
+RUN apt-get -qq update \
+ && apt-get -qq install \
+    php7.3-bcmath \
+    php7.3-bz2 \
+    php7.3-cli \
+    php7.3-common \
+    php7.3-curl \
+    php7.3-dev \
     php7.3-fpm \
-    php7.3-mysql \
     php7.3-gd \
     php7.3-imagick \
-    php7.3-dev \
-    php7.3-curl \
-    php7.3-opcache \
-    php7.3-cli \
-    php7.3-sqlite \
-    php7.3-intl \
-    php7.3-tidy \
     php7.3-imap \
+    php7.3-intl \
     php7.3-json \
-    php7.3-pspell \
-    php7.3-recode \
-    php7.3-common \
-    php7.3-sybase \
-    php7.3-sqlite3 \
-    php7.3-bz2 \
-    php7.3-common \
-    php7.3-memcached \
-    php7.3-redis \
-    php7.3-xml \
-    php7.3-shmop \
     php7.3-mbstring \
-    php7.3-zip \
-    php7.3-bcmath \
+    php7.3-memcached \
+    php7.3-mysql \
+    php7.3-opcache \
+    php7.3-pgsql \
+    php7.3-readline \
+    php7.3-recode \
+    php7.3-redis \
+    php7.3-shmop \
     php7.3-soap \
+    php7.3-sqlite \
+    php7.3-sqlite3 \
+    php7.3-xml \
+    php7.3-zip \
     > /dev/null
 
-COPY php/fpm.ini /etc/php/7.3/cli/php.ini
-COPY php/cli.ini /etc/php/7.3/fpm/php.ini
+COPY php/cli.ini /etc/php/7.3/cli/php.ini
+COPY php/fpm.ini /etc/php/7.3/fpm/php.ini
 COPY php/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
 RUN mkdir -p /var/run/php \
