@@ -18,21 +18,25 @@ sed -i "s|%TIMEZONE%|$timezone|g" /etc/php/7.4/fpm/php.ini
 # SET APPLICATION ROOT
 #####################################
 
-# define application root
 application_root="${APPLICATION_ROOT:-/app}";
 
-# configure nginx
 sed -i "s|%APPLICATION_ROOT%|$application_root|g" /etc/nginx/conf.d/default.conf
 
 #####################################
 # SET PHP FPM USER
 #####################################
 
-# define application root
 php_fpm_user="${PHP_FPM_USER:-www-data}";
 
-# configure nginx
 sed -i "s|%PHP_FPM_USER%|$php_fpm_user|g" /etc/php/7.4/fpm/pool.d/www.conf
+
+#####################################
+# ENABLE/DISABLE OPCACHE
+#####################################
+
+opcache="${OPCACHE:-1}";
+
+sed -i "s|%OPCACHE%|$opcache|g" /etc/php/7.4/fpm/pool.d/www.conf
 
 #####################################
 # RUN ADDITIONAL ENTRYPOINTS
