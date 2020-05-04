@@ -3,7 +3,7 @@
 for dir in */ ; do
     image=`basename "$dir"`
     for subdir in $dir*/ ; do
-        tag=$(echo `basename "$subdir"` | sed 's/\-/\./g')
+        tag=`basename "$subdir"`
         docker build --tag smoothy/$image:$tag ./$subdir
         docker push smoothy/$image:$tag
     done
